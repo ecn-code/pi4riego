@@ -33,7 +33,7 @@ public class DeviceI2CController {
 
                 I2CDevice i2cDevice = i2c.getDevice(i);
                 i2cDevice.write("{'res':'info'}".getBytes());
-
+                Thread.sleep(100);
                 byte[] buffer = new byte[100];
                 i2cDevice.read(buffer, 0, 100);
                 String s = Arrays.toString(buffer);

@@ -75,5 +75,19 @@ public class DeviceController {
         ApplicationStartup.getConsole().separatorLine();
         return response;
     }
+    @RequestMapping(value = "/dicover",
+            method = RequestMethod.PUT,
+            consumes = "application/json",
+            produces = "application/json")
+    public ResponseEntity<String> discover(){
+        try {
+            DeviceI2CController.discoverThings();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (I2CFactory.UnsupportedBusNumberException e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<String>(HttpStatus.ACCEPTED);
+    }
 
 }

@@ -37,7 +37,7 @@ public class DeviceI2CController {
                 byte[] buffer = new byte[100];
                 i2cDevice.read(buffer, 0, 100);
                 String s = Arrays.toString(buffer);
-                ApplicationStartup.getConsole().println(new String(buffer));
+                ApplicationStartup.getConsole().println(s);
                 things.add(i);
 
             }catch(Exception e){

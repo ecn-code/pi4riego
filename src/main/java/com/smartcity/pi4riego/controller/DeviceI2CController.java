@@ -28,8 +28,8 @@ public class DeviceI2CController {
         i2cDevice.write(action.getBytes());
     }
 
-    public static ArrayList<Integer> discoverThings() throws IOException, I2CFactory.UnsupportedBusNumberException, InterruptedException {
-        ArrayList<Integer> things = new ArrayList<Integer>();
+    public static ArrayList<DeviceI2C> discoverThings() throws IOException, I2CFactory.UnsupportedBusNumberException, InterruptedException {
+        ArrayList<DeviceI2C> things = new ArrayList<DeviceI2C>();
         I2CBus i2c = I2CFactory.getInstance(I2CBus.BUS_1);
         String s = null;
         for(int i=START_ADDRESS;i<=END_ADDRESS;i++){
@@ -52,7 +52,6 @@ public class DeviceI2CController {
 
                 //s = new String(buffer, "UTF-8").split("�")[0];
                 ApplicationStartup.getConsole().println(message);
-                things.add(i);
 
             /*}catch(Exception e){
                 ApplicationStartup.getConsole().println("En la direccion "+i+" no hay nada.");
@@ -63,6 +62,7 @@ public class DeviceI2CController {
                 try {
                     JSONObject json = (JSONObject) parser.parse(message);
                     ApplicationStartup.getConsole().println(json.toJSONString());
+                    things.add(new DeviceI2C(i, (String[]) json.keySet().toArray(), i));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

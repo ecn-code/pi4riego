@@ -58,10 +58,11 @@ public class DeviceI2CController {
                 ApplicationStartup.getConsole().println("En la direccion "+i+" no hay nada.");
             }*/
 
-            if(s != null) {
+            if(message != null) {
                 JSONParser parser = new JSONParser();
                 try {
-                    JSONObject json = (JSONObject) parser.parse(s);
+                    JSONObject json = (JSONObject) parser.parse(message);
+                    ApplicationStartup.getConsole().println(json.toJSONString());
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

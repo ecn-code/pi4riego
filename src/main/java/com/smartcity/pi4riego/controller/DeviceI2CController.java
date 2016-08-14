@@ -42,6 +42,7 @@ public class DeviceI2CController {
                 int size = i2cDevice.read(buffer, 0, 100);
                 s = new String(buffer, "UTF-8").substring(0, size);
                 ApplicationStartup.getConsole().println(s);
+                ApplicationStartup.getConsole().println(size);
                 things.add(i);
 
             }catch(Exception e){

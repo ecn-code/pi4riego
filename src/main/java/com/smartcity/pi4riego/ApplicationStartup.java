@@ -33,24 +33,19 @@ public class ApplicationStartup
         devices = new HashMap<String, Device>();
 
         //Guardamos el device en la tabla de la PI
-        String[] deviceComponents = new String[]{"led01","led02"};
+        /*String[] deviceComponents = new String[]{"led01","led02"};
         Device device = new DeviceI2C(5, deviceComponents, 5);
         devices.put("led01", device);
-        devices.put("led02", device);
+        devices.put("led02", device);*/
     }
 
     @Override
     public void onApplicationEvent(final ContextRefreshedEvent event) {
-        //Explorar dispositivos conectados
-        try {
-            DeviceI2CController.discoverThings();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (I2CFactory.UnsupportedBusNumberException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
+    }
+
+    public static void addDevice(String key, Device device){
+        devices.put(key, device);
     }
 
     public static Device getDevice(String key){

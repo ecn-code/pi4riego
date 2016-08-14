@@ -40,8 +40,10 @@ public class DeviceI2CController {
                 Thread.sleep(100);
                 String message = "";
                 int b = i2cDevice.read();
-                while(b != '_'){
-                    message += (char) b;
+                while(((char)b) != '_'){
+                    if(b != 0) {
+                        message += (char) b;
+                    }
                     b = i2cDevice.read();
                 }
 

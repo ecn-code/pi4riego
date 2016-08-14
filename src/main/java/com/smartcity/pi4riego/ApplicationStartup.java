@@ -1,6 +1,8 @@
 package com.smartcity.pi4riego;
 
+import com.pi4j.io.i2c.I2CFactory;
 import com.pi4j.util.Console;
+import com.smartcity.pi4riego.controller.DeviceI2CController;
 import com.smartcity.pi4riego.entity.Device;
 import com.smartcity.pi4riego.entity.DeviceI2C;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
@@ -8,6 +10,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.context.ApplicationListener;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 /**
@@ -38,7 +41,13 @@ public class ApplicationStartup
     @Override
     public void onApplicationEvent(final ContextRefreshedEvent event) {
         //Explorar dispositivos conectados
-
+        try {
+            DeviceI2CController.discoverThings();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (I2CFactory.UnsupportedBusNumberException e) {
+            e.printStackTrace();
+        }
     }
 
     public static Device getDevice(String key){

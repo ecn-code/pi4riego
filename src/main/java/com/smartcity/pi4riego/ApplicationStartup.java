@@ -28,7 +28,10 @@ public class ApplicationStartup
         devices = new HashMap<String, Device>();
 
         //Guardamos el device en la tabla de la PI
-        devices.put("led01", new Device(5, "led01", 5));
+        String[] deviceComponents = new String[]{"led01","led02"};
+        Device device = new Device(5, deviceComponents, 5);
+        devices.put("led01", device);
+        devices.put("led02", device);
     }
 
     @Override

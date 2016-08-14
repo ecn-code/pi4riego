@@ -6,12 +6,12 @@ package com.smartcity.pi4riego.entity;
 public class Device {
 
     private final long id;
-    private final String name;
+    private String[] deviceComponents;
     private final int addressNumber;
 
-    public Device(long id, String name, int addressNumber) {
+    public Device(long id, String[] deviceComponents, int addressNumber) {
         this.id = id;
-        this.name = name;
+        this.deviceComponents = deviceComponents;
         this.addressNumber = addressNumber;
     }
 
@@ -19,11 +19,11 @@ public class Device {
         return id;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public int getAddressNumber() {
         return addressNumber;
+    }
+
+    public String[] getDeviceComponents() {
+        return deviceComponents;
     }
 }

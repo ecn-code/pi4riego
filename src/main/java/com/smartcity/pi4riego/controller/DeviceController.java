@@ -50,7 +50,7 @@ public class DeviceController {
 
                 ApplicationStartup.getConsole().println("Service action: "+action);
 
-                action = action.replace("}", ", 'res':'"+device.getName()+"'}");
+                action = action.replace("}", ", 'res':'"+name+"'}");
                 //byte[] b = "{'a':1234}".getBytes();
                 deviceI2C.write(action.getBytes());
                 response = new ResponseEntity<String>(HttpStatus.ACCEPTED);

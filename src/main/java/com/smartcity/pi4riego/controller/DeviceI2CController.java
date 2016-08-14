@@ -19,7 +19,7 @@ import java.util.Arrays;
 public class DeviceI2CController {
 
     private static final int START_ADDRESS = 5;
-    private static final int END_ADDRESS = 6;
+    private static final int END_ADDRESS = 5;
 
     public static void write(DeviceI2C device, String action) throws IOException, I2CFactory.UnsupportedBusNumberException {
         I2CBus i2c = I2CFactory.getInstance(I2CBus.BUS_1);
@@ -33,7 +33,7 @@ public class DeviceI2CController {
         I2CBus i2c = I2CFactory.getInstance(I2CBus.BUS_1);
         String s = null;
         for(int i=START_ADDRESS;i<=END_ADDRESS;i++){
-            try{
+           // try{
 
                 I2CDevice i2cDevice = i2c.getDevice(i);
                 i2cDevice.write("{'res':'info'}".getBytes());
@@ -53,9 +53,9 @@ public class DeviceI2CController {
                 ApplicationStartup.getConsole().println(message);
                 things.add(i);
 
-            }catch(Exception e){
+            /*}catch(Exception e){
                 ApplicationStartup.getConsole().println("En la direccion "+i+" no hay nada.");
-            }
+            }*/
 
             if(s != null) {
                 JSONParser parser = new JSONParser();

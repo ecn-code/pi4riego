@@ -51,7 +51,10 @@ public class DeviceController {
                 action = action.replace("}", ", 'res':'"+name+"'}");
 
                 if(device.getType().equals("DeviceI2C")){
-                    DeviceI2CController.write((DeviceI2C) device, action);
+                    String[] msg = action.split(",");
+                    for(int i = 0;i<msg.length;i++){
+                        DeviceI2CController.write((DeviceI2C) device, msg[i]);
+                    }
                 }
 
                 response = new ResponseEntity<String>(HttpStatus.ACCEPTED);
@@ -76,7 +79,7 @@ public class DeviceController {
         ApplicationStartup.getConsole().separatorLine();
         return response;
     }
-    @RequestMapping(value = "/dicover",
+    @RequestMapping(value = "/discover",
             method = RequestMethod.PUT,
             consumes = "application/json",
             produces = "application/json")

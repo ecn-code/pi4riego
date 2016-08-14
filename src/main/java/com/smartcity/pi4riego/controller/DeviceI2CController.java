@@ -33,9 +33,9 @@ public class DeviceI2CController {
                 I2CDevice i2cDevice = i2c.getDevice(i);
                 i2cDevice.write("{'res':'info'}".getBytes());
 
-                byte[] buffer = new byte[100];
-                i2cDevice.read(buffer, 0, 100);
-                String s = new String(buffer, "UTF-8");
+                byte[] buffer = new byte[5];
+                i2cDevice.read(buffer, 0, 5);
+                String s = new String(buffer);
                 ApplicationStartup.getConsole().println(s);
 
                 things.add(i);

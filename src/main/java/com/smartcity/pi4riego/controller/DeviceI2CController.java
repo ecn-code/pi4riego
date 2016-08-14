@@ -5,6 +5,9 @@ import com.pi4j.io.i2c.I2CDevice;
 import com.pi4j.io.i2c.I2CFactory;
 import com.smartcity.pi4riego.ApplicationStartup;
 import com.smartcity.pi4riego.entity.DeviceI2C;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,6 +31,7 @@ public class DeviceI2CController {
     public static ArrayList<Integer> discoverThings() throws IOException, I2CFactory.UnsupportedBusNumberException {
         ArrayList<Integer> things = new ArrayList<Integer>();
         I2CBus i2c = I2CFactory.getInstance(I2CBus.BUS_1);
+        String s = null;
         for(int i=START_ADDRESS;i<=END_ADDRESS;i++){
             try{
 
@@ -36,12 +40,21 @@ public class DeviceI2CController {
                 Thread.sleep(100);
                 byte[] buffer = new byte[100];
                 i2cDevice.read(buffer, 0, 100);
-                String s = Arrays.toString(buffer);
+                s = new String(buffer, "UTF-8");
                 ApplicationStartup.getConsole().println(s);
                 things.add(i);
 
             }catch(Exception e){
                 ApplicationStartup.getConsole().println("En la direccion "+i+" no hay nada.");
+            }
+
+            if(s != null) {
+                JSONParser parser = new JSONParser();
+                try {
+                    JSONObject json = (JSONObject) parser.parse(s);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         }
 

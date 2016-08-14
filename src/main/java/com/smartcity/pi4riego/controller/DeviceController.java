@@ -80,7 +80,7 @@ public class DeviceController {
             method = RequestMethod.PUT,
             consumes = "application/json",
             produces = "application/json")
-    public ResponseEntity<String> discover(){
+    public ResponseEntity<String> discover() throws InterruptedException {
         try {
             DeviceI2CController.discoverThings();
         } catch (IOException e) {

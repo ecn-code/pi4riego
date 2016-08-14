@@ -48,6 +48,8 @@ public class ApplicationStartup
             e.printStackTrace();
         } catch (I2CFactory.UnsupportedBusNumberException e) {
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 

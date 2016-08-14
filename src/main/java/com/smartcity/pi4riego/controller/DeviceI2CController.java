@@ -37,13 +37,14 @@ public class DeviceI2CController {
 
                 I2CDevice i2cDevice = i2c.getDevice(i);
                 i2cDevice.write("{'res':'info'}".getBytes());
-                Thread.sleep(100);
+
                 String message = "";
                 int b = i2cDevice.read();
                 while(((char)b) != '_'){
                     if(b != 0) {
                         message += (char) b;
                     }
+                    Thread.sleep(10);
                     b = i2cDevice.read();
                 }
 

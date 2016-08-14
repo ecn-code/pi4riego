@@ -38,7 +38,7 @@ public class DeviceI2CController {
                 i2cDevice.read(buffer, 0, 5);
                 String s = Arrays.toString(buffer);
                 ApplicationStartup.getConsole().println(s);
-                ApplicationStartup.getConsole().println(new String(s));
+                ApplicationStartup.getConsole().println(new String(buffer, "UTF-8"));
                 things.add(i);
 
             }catch(Exception e){

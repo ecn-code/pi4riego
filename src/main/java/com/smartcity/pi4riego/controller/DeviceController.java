@@ -48,9 +48,9 @@ public class DeviceController {
                 I2CDevice deviceI2C = i2c.getDevice(DEVICE_ADDR);
 
 
-                ApplicationStartup.getConsole().println("Service action: ", action);
+                ApplicationStartup.getConsole().println("Service action: "+action);
 
-
+                action = action.replace("}", ", 'res':'"+device.getName()+"'}");
                 //byte[] b = "{'a':1234}".getBytes();
                 deviceI2C.write(action.getBytes());
                 response = new ResponseEntity<String>(HttpStatus.ACCEPTED);

@@ -8,6 +8,7 @@ import com.smartcity.pi4riego.entity.DeviceI2C;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by eliasibz on 14/08/16.
@@ -35,9 +36,9 @@ public class DeviceI2CController {
 
                 byte[] buffer = new byte[5];
                 i2cDevice.read(buffer, 0, 5);
-                String s = new String(buffer);
+                String s = Arrays.toString(buffer);
                 ApplicationStartup.getConsole().println(s);
-
+                ApplicationStartup.getConsole().println(new String(s));
                 things.add(i);
 
             }catch(Exception e){

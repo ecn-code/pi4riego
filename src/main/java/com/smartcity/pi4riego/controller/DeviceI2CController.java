@@ -38,10 +38,17 @@ public class DeviceI2CController {
                 I2CDevice i2cDevice = i2c.getDevice(i);
                 i2cDevice.write("{'res':'info'}".getBytes());
                 Thread.sleep(100);
-                byte[] buffer = new byte[100];
-                i2cDevice.read(buffer, 0, 100);
-                s = new String(buffer, "UTF-8").split("�")[0];
-                ApplicationStartup.getConsole().println(s);
+                String message = "";
+                int b = i2cDevice.read();
+                while(b != 0){
+                    message += (char) b;
+                    b = i2cDevice.read();
+                }
+
+
+
+                //s = new String(buffer, "UTF-8").split("�")[0];
+                ApplicationStartup.getConsole().println(message);
                 things.add(i);
 
             }catch(Exception e){

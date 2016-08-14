@@ -7,6 +7,7 @@ import com.smartcity.pi4riego.Application;
 import com.smartcity.pi4riego.ApplicationStartup;
 import com.smartcity.pi4riego.entity.Device;
 import com.smartcity.pi4riego.entity.DeviceI2C;
+import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -85,6 +86,8 @@ public class DeviceController {
         } catch (IOException e) {
             e.printStackTrace();
         } catch (I2CFactory.UnsupportedBusNumberException e) {
+            e.printStackTrace();
+        }catch (ParseException e) {
             e.printStackTrace();
         }
         return new ResponseEntity<String>(HttpStatus.ACCEPTED);

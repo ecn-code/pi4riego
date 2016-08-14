@@ -87,8 +87,6 @@ public class DeviceController {
             e.printStackTrace();
         } catch (I2CFactory.UnsupportedBusNumberException e) {
             e.printStackTrace();
-        }catch (ParseException e) {
-            e.printStackTrace();
         }
         return new ResponseEntity<String>(HttpStatus.ACCEPTED);
     }

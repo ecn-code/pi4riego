@@ -36,9 +36,12 @@ public class DeviceController {
         byte[] b = "{'a':1234}".getBytes();
         device.write(b);
 
+        String s2 = Arrays.toString(b);
+        console.println(s2);
+
         device.read(b, 0, b.length);
 
-        String s2 = new String(b);
+        s2 = Arrays.toString(b);
         console.println(s2);
 
         return new Device(id);

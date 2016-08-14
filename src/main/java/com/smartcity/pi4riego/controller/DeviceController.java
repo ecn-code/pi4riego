@@ -53,6 +53,9 @@ public class DeviceController {
                 if(device.getType().equals("DeviceI2C")){
                     String[] msg = action.split(",");
                     for(int i = 0;i<msg.length;i++){
+                        if((i + 1) != msg.length){
+                            msg[i] += ",";
+                        }
                         DeviceI2CController.write((DeviceI2C) device, msg[i]);
                     }
                 }

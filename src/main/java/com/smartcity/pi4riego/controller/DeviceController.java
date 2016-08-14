@@ -3,48 +3,77 @@ package com.smartcity.pi4riego.controller;
 import com.pi4j.io.i2c.I2CBus;
 import com.pi4j.io.i2c.I2CDevice;
 import com.pi4j.io.i2c.I2CFactory;
-import com.pi4j.util.Console;
+import com.smartcity.pi4riego.Application;
+import com.smartcity.pi4riego.ApplicationStartup;
 import com.smartcity.pi4riego.entity.Device;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.util.Arrays;
+import java.io.*;
 
 /**
  * Created by eliasibz on 13/08/16.
  */
 @RestController
-@RequestMapping("/device")
+@RequestMapping("/thing")
 public class DeviceController {
 
     public static final int DEVICE_ADDR = 0x05;
 
-    @RequestMapping(value="/{id}", method= RequestMethod.GET, produces = "application/json")
-    public @ResponseBody Device getStatus(@PathVariable int id) throws IOException, I2CFactory.UnsupportedBusNumberException {
+    @RequestMapping(value = "/{name}", method = RequestMethod.GET, produces = "application/json")
+    public
+    @ResponseBody
+    Device get(@PathVariable String name) throws IOException, I2CFactory.UnsupportedBusNumberException {
+        return ApplicationStartup.getDevice(name);
+    }
 
-        final Console console = new Console();
-        console.title("<-- The Pi4J Project -->", "I2C Example");
+    @RequestMapping(value = "/{name}",
+            method = RequestMethod.PUT,
+            consumes = "application/json",
+            produces = "application/json")
+    public ResponseEntity<String> action(@PathVariable String name, @RequestBody String action){
 
-        console.promptForExit();
 
-        I2CBus i2c = I2CFactory.getInstance(I2CBus.BUS_1);
+        ResponseEntity<String> response;
 
-        I2CDevice device = i2c.getDevice(DEVICE_ADDR);
+        //Obtener device segun nombre
+        Device device = ApplicationStartup.getDevice(name);
 
-        console.println("... reading ID register from TSL2561");
-        byte[] b = "{'a':1234}".getBytes();
-        device.write(b);
+        if(device == null){
+            response = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+        }else {
+            try {
+                I2CBus i2c = I2CFactory.getInstance(I2CBus.BUS_1);
+                I2CDevice deviceI2C = i2c.getDevice(DEVICE_ADDR);
 
-        String s2 = Arrays.toString(b);
-        console.println(s2);
 
-        device.read(b, 0, b.length);
+                ApplicationStartup.getConsole().println("Service action: ", action);
 
-        s2 = Arrays.toString(b);
-        console.println(s2);
 
-        return new Device(id);
+                //byte[] b = "{'a':1234}".getBytes();
+                deviceI2C.write(action.getBytes());
+                response = new ResponseEntity<String>(HttpStatus.ACCEPTED);
+            }catch (IOException e){
+                response = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+            }catch (I2CFactory.UnsupportedBusNumberException e){
+                response = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+            }catch(UnsatisfiedLinkError e){
+                ApplicationStartup.getConsole().println("No hay puerto I2C disponible");
+                response = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+            }
+
+            //String s2 = Arrays.toString(b);
+            //console.println(s2);
+
+            //device.read(b, 0, b.length);
+
+            //s2 = Arrays.toString(b);
+            //console.println(s2);
+
+        }
+        ApplicationStartup.getConsole().separatorLine();
+        return response;
     }
 
 }

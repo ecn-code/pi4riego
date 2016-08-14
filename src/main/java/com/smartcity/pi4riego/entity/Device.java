@@ -1,6 +1,7 @@
 package com.smartcity.pi4riego.entity;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Created by eliasibz on 13/08/16.
@@ -25,5 +26,11 @@ public abstract class Device {
     }
 
     public abstract String getType();
+
+    @Override
+    public String toString(){
+
+        return "Device id: "+id+ ", components: " + Arrays.toString(deviceComponents);
+    }
 
 }

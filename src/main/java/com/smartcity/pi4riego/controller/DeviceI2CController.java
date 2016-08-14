@@ -62,7 +62,7 @@ public class DeviceI2CController {
                 try {
                     JSONObject json = (JSONObject) parser.parse(message);
                     ApplicationStartup.getConsole().println(json.toJSONString());
-                    things.add(new DeviceI2C(i, (String[]) json.keySet().toArray(), i));
+                    things.add(new DeviceI2C(i, (String[]) json.keySet().toArray(new String[json.keySet().size()]), i));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

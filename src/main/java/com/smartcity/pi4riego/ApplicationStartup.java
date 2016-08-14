@@ -5,6 +5,7 @@ import com.pi4j.util.Console;
 import com.smartcity.pi4riego.controller.DeviceI2CController;
 import com.smartcity.pi4riego.entity.Device;
 import com.smartcity.pi4riego.entity.DeviceI2C;
+import org.json.simple.parser.ParseException;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -46,6 +47,8 @@ public class ApplicationStartup
         } catch (IOException e) {
             e.printStackTrace();
         } catch (I2CFactory.UnsupportedBusNumberException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
             e.printStackTrace();
         }
     }

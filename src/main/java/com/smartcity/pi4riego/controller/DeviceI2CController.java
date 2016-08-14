@@ -34,7 +34,7 @@ public class DeviceI2CController {
         I2CBus i2c = I2CFactory.getInstance(I2CBus.BUS_1);
         byte[] buffer = new byte[100];
         for(int i=START_ADDRESS;i<=END_ADDRESS;i++){
-            try{
+            //try{
 
                 I2CDevice i2cDevice = i2c.getDevice(i);
                 i2cDevice.write("{'res':'info'}".getBytes());
@@ -43,9 +43,9 @@ public class DeviceI2CController {
                 i2cDevice.read(buffer, 0, 100);
 
 
-            }catch(Exception e){
+            /*}catch(Exception e){
                 ApplicationStartup.getConsole().println("En la direccion "+i+" no hay nada.");
-            }
+            }*/
 
             String s = new String(buffer, "UTF-8");
             JSONParser parser = new JSONParser();

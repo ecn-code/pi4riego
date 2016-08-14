@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Created by eliasibz on 13/08/16.
@@ -32,8 +33,13 @@ public class DeviceController {
         I2CDevice device = i2c.getDevice(DEVICE_ADDR);
 
         console.println("... reading ID register from TSL2561");
-        byte[] b = "Hola Mundo".getBytes();
+        byte[] b = "{'a':1234}".getBytes();
         device.write(b);
+
+        device.read(b, 0, b.length);
+
+        String s2 = new String(b);
+        console.println(s2);
 
         return new Device(id);
     }

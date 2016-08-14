@@ -2,6 +2,7 @@ package com.smartcity.pi4riego;
 
 import com.pi4j.util.Console;
 import com.smartcity.pi4riego.entity.Device;
+import com.smartcity.pi4riego.entity.DeviceI2C;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -29,13 +30,14 @@ public class ApplicationStartup
 
         //Guardamos el device en la tabla de la PI
         String[] deviceComponents = new String[]{"led01","led02"};
-        Device device = new Device(5, deviceComponents, 5);
+        Device device = new DeviceI2C(5, deviceComponents, 5);
         devices.put("led01", device);
         devices.put("led02", device);
     }
 
     @Override
     public void onApplicationEvent(final ContextRefreshedEvent event) {
+        //Explorar dispositivos conectados
 
     }
 

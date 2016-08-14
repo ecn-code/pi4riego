@@ -6,6 +6,7 @@ import com.pi4j.io.i2c.I2CFactory;
 import com.smartcity.pi4riego.Application;
 import com.smartcity.pi4riego.ApplicationStartup;
 import com.smartcity.pi4riego.entity.Device;
+import com.smartcity.pi4riego.entity.DeviceI2C;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,15 +45,14 @@ public class DeviceController {
             response = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
         }else {
             try {
-                I2CBus i2c = I2CFactory.getInstance(I2CBus.BUS_1);
-                I2CDevice deviceI2C = i2c.getDevice(DEVICE_ADDR);
-
-
                 ApplicationStartup.getConsole().println("Service action: "+action);
 
                 action = action.replace("}", ", 'res':'"+name+"'}");
-                //byte[] b = "{'a':1234}".getBytes();
-                deviceI2C.write(action.getBytes());
+
+                if(device.getType().equals("DeviceI2C")){
+                    DeviceI2CController.write((DeviceI2C) device, action);
+                }
+
                 response = new ResponseEntity<String>(HttpStatus.ACCEPTED);
             }catch (IOException e){
                 response = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);

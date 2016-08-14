@@ -28,7 +28,7 @@ public class DeviceI2CController {
         i2cDevice.write(action.getBytes());
     }
 
-    public static ArrayList<Integer> discoverThings() throws IOException, I2CFactory.UnsupportedBusNumberException {
+    public static ArrayList<Integer> discoverThings() throws IOException, I2CFactory.UnsupportedBusNumberException, InterruptedException {
         ArrayList<Integer> things = new ArrayList<Integer>();
         I2CBus i2c = I2CFactory.getInstance(I2CBus.BUS_1);
         String s = null;

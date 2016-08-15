@@ -1,8 +1,8 @@
 package com.smartcity.pi4riego.controller;
 
 import com.pi4j.io.i2c.I2CFactory;
-import com.smartcity.pi4riego.entity.Device;
-import com.smartcity.pi4riego.entity.DeviceI2C;
+import com.smartcity.pi4riego.entity.Thing;
+import com.smartcity.pi4riego.entity.ThingI2C;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,14 +14,14 @@ import java.io.*;
  */
 @RestController
 @RequestMapping("/thing")
-public class DeviceController {
+public class ThingController {
 
     public static final int DEVICE_ADDR = 0x05;
 
     @RequestMapping(value = "/{name}", method = RequestMethod.GET, produces = "application/json")
     public
     @ResponseBody
-    Device get(@PathVariable String name) throws IOException, I2CFactory.UnsupportedBusNumberException {
+    Thing get(@PathVariable String name) throws IOException, I2CFactory.UnsupportedBusNumberException {
         return ApplicationController.getDevice(name);
     }
 
@@ -34,10 +34,10 @@ public class DeviceController {
 
         ResponseEntity<String> response;
 
-        //Obtener device segun nombre
-        Device device = ApplicationController.getDevice(name);
+        //Obtener thing segun nombre
+        Thing thing = ApplicationController.getDevice(name);
 
-        if (device == null) {
+        if (thing == null) {
             response = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
         } else {
             try {
@@ -45,9 +45,8 @@ public class DeviceController {
 
                 action = action.replace("}", ", 'res':'" + name + "'}");
 
-                if (device.getType().equals("DeviceI2C")) {
-                    DeviceI2CController.write((DeviceI2C) device, action);
-
+                if (thing.getType() == 0) {
+                    ThingI2CController.write((ThingI2C) thing, action);
                 }
 
                 response = new ResponseEntity<String>(HttpStatus.ACCEPTED);
@@ -63,7 +62,7 @@ public class DeviceController {
             //String s2 = Arrays.toString(b);
             //console.println(s2);
 
-            //device.read(b, 0, b.length);
+            //thing.read(b, 0, b.length);
 
             //s2 = Arrays.toString(b);
             //console.println(s2);

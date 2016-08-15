@@ -2,11 +2,9 @@ package com.smartcity.pi4riego.controller;
 
 import com.pi4j.io.i2c.I2CFactory;
 import com.pi4j.util.Console;
-import com.smartcity.pi4riego.controller.DeviceI2CController;
-import com.smartcity.pi4riego.entity.Device;
-import com.smartcity.pi4riego.entity.DeviceI2C;
-import org.json.simple.parser.ParseException;
-import org.springframework.boot.context.event.ApplicationStartedEvent;
+import com.smartcity.pi4riego.entity.Thing;
+import com.smartcity.pi4riego.entity.ThingComponent;
+import com.smartcity.pi4riego.entity.ThingI2C;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.context.ApplicationListener;
@@ -14,6 +12,8 @@ import org.springframework.context.ApplicationListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by eliasibz on 14/08/16.
@@ -22,16 +22,18 @@ import java.util.HashMap;
 public class ApplicationController
         implements ApplicationListener<ContextRefreshedEvent> {
 
-    private static HashMap<String, Device> devices;
+    private static HashMap<String, Thing> devices;
+    private static Set<String> sensors;
     private static final Console console = new Console();
 
     ApplicationController(){
 
-        devices = new HashMap<String, Device>();
+        devices = new HashMap<String, Thing>();
+        sensors = new HashSet<String>();
 
         //Guardamos el device en la tabla de la PI
         /*String[] deviceComponents = new String[]{"led01","led02"};
-        Device device = new DeviceI2C(5, deviceComponents, 5);
+        Thing device = new ThingI2C(5, deviceComponents, 5);
         devices.put("led01", device);
         devices.put("led02", device);*/
     }
@@ -41,20 +43,25 @@ public class ApplicationController
 
     }
 
-    public static void addDevice(String key, Device device){
-        devices.put(key, device);
+    public static void addDevice(String key, Thing thing){
+        devices.put(key, thing);
     }
 
     public static void discoverI2CDevices(){
         try {
-            ArrayList<DeviceI2C> devices = DeviceI2CController.discoverThings();
+            ArrayList<ThingI2C> devices = ThingI2CController.discoverThings();
             ApplicationController.getConsole().println(devices);
 
             for (int i=0;i<devices.size();i++) {
-                Device device = devices.get(i);
-                for(int y=0;y<device.getDeviceComponents().length;y++){
-                    String component = device.getDeviceComponents()[y];
-                    ApplicationController.addDevice(component, device);
+                Thing thing = devices.get(i);
+                for(int y = 0; y< thing.getThingComponents().length; y++){
+                    ThingComponent component = thing.getThingComponents()[y];
+                    ApplicationController.addDevice(component.getName(), thing);
+
+                    //Si es un sensor, se registra para ser consultado
+                    if(component.getType() == 1){
+                        sensors.add(component.getName());
+                    }
                 }
             }
             ApplicationController.getConsole().separatorLine();
@@ -68,7 +75,11 @@ public class ApplicationController
         }
     }
 
-    public static Device getDevice(String key){
+    public static Set<String> getSensors() {
+        return sensors;
+    }
+
+    public static Thing getDevice(String key){
         return devices.get(key);
     }
 

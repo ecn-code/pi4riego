@@ -20,8 +20,13 @@ public class ThingI2CController {
     private static final int START_ADDRESS = 5;
     private static final int END_ADDRESS = 5;
 
+
+    private static synchronized I2CBus getI2CBus() throws IOException, I2CFactory.UnsupportedBusNumberException {
+        return I2CFactory.getInstance(I2CBus.BUS_1);
+    }
+
     public static void write(ThingI2C device, String action) throws IOException, I2CFactory.UnsupportedBusNumberException {
-        I2CBus i2c = I2CFactory.getInstance(I2CBus.BUS_1);
+        I2CBus i2c = getI2CBus();
         I2CDevice i2cDevice = i2c.getDevice(device.getAddressNumber());
         String[] msg = action.split(",");
         for (int i = 0; i < msg.length; i++) {
@@ -33,7 +38,7 @@ public class ThingI2CController {
     }
 
     public static String read(ThingI2C device) throws IOException, I2CFactory.UnsupportedBusNumberException, InterruptedException {
-        I2CBus i2c = I2CFactory.getInstance(I2CBus.BUS_1);
+        I2CBus i2c = getI2CBus();
         I2CDevice i2cDevice = i2c.getDevice(device.getAddressNumber());
         String message = "";
         int b = i2cDevice.read();

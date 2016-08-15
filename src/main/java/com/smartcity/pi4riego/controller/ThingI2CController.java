@@ -19,6 +19,7 @@ public class ThingI2CController {
 
     private static final int START_ADDRESS = 5;
     private static final int END_ADDRESS = 5;
+    private static Object lock1 = new Object();
 
 
     private static synchronized I2CBus getI2CBus() throws IOException, I2CFactory.UnsupportedBusNumberException {
@@ -26,28 +27,33 @@ public class ThingI2CController {
     }
 
     public static void write(ThingI2C device, String action) throws IOException, I2CFactory.UnsupportedBusNumberException {
-        I2CBus i2c = getI2CBus();
-        I2CDevice i2cDevice = i2c.getDevice(device.getAddressNumber());
-        String[] msg = action.split(",");
-        for (int i = 0; i < msg.length; i++) {
-            if ((i + 1) != msg.length) {
-                msg[i] += ",";
+        synchronized (lock1) {
+            I2CBus i2c = getI2CBus();
+            I2CDevice i2cDevice = i2c.getDevice(device.getAddressNumber());
+            String[] msg = action.split(",");
+            for (int i = 0; i < msg.length; i++) {
+                if ((i + 1) != msg.length) {
+                    msg[i] += ",";
+                }
+                i2cDevice.write(msg[i].getBytes());
             }
-            i2cDevice.write(msg[i].getBytes());
         }
     }
 
     public static String read(ThingI2C device) throws IOException, I2CFactory.UnsupportedBusNumberException, InterruptedException {
-        I2CBus i2c = getI2CBus();
-        I2CDevice i2cDevice = i2c.getDevice(device.getAddressNumber());
         String message = "";
-        int b = i2cDevice.read();
-        while (((char) b) != '_') {
-            if (b != 0) {
-                message += (char) b;
+        synchronized (lock1) {
+            I2CBus i2c = getI2CBus();
+            I2CDevice i2cDevice = i2c.getDevice(device.getAddressNumber());
+
+            int b = i2cDevice.read();
+            while (((char) b) != '_') {
+                if (b != 0) {
+                    message += (char) b;
+                }
+                Thread.sleep(10);
+                b = i2cDevice.read();
             }
-            Thread.sleep(10);
-            b = i2cDevice.read();
         }
 
         return message;

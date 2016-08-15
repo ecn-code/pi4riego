@@ -34,14 +34,15 @@ public class DeviceI2CController {
     public static ArrayList<DeviceI2C> discoverThings() throws IOException, I2CFactory.UnsupportedBusNumberException, InterruptedException {
         ArrayList<DeviceI2C> things = new ArrayList<DeviceI2C>();
         I2CBus i2c = I2CFactory.getInstance(I2CBus.BUS_1);
-        String s = null;
+        String message = "";
         for (int i = START_ADDRESS; i <= END_ADDRESS; i++) {
-            // try{
+            try{
 
             I2CDevice i2cDevice = i2c.getDevice(i);
+            Thread.sleep(10);
             i2cDevice.write("{'res':'info'}".getBytes());
 
-            String message = "";
+
             int b = i2cDevice.read();
             while (((char) b) != '_') {
                 if (b != 0) {
@@ -55,9 +56,9 @@ public class DeviceI2CController {
             //s = new String(buffer, "UTF-8").split("�")[0];
             ApplicationController.getConsole().println(message);
 
-            /*}catch(Exception e){
-                ApplicationStartup.getConsole().println("En la direccion "+i+" no hay nada.");
-            }*/
+            }catch(Exception e){
+                ApplicationController.getConsole().println("En la direccion "+i+" no hay nada.");
+            }
 
             if (message != null) {
                 JSONParser parser = new JSONParser();

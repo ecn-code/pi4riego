@@ -33,6 +33,9 @@ public class ScheduledTasks {
 
     @Scheduled(fixedRate = 2000)
     public void pullSensors() {
+
+        ApplicationController.getConsole().println("--- Start Pull Sensors--");
+
         for(int i=0;i<ApplicationController.getSensors().size();i++){
             Thing thing = ApplicationController.getDevice((String)ApplicationController.getSensors().toArray()[i]);
             if(thing.getType() == 0) {
@@ -52,6 +55,10 @@ public class ScheduledTasks {
                 }
             }
         }
+
+        ApplicationController.getConsole().separatorLine();
     }
+
+
 
 }

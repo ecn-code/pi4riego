@@ -1,4 +1,4 @@
-package com.smartcity.pi4riego;
+package com.smartcity.pi4riego.controller;
 
 import com.pi4j.io.i2c.I2CFactory;
 import com.pi4j.util.Console;
@@ -12,23 +12,20 @@ import org.springframework.stereotype.Component;
 import org.springframework.context.ApplicationListener;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
  * Created by eliasibz on 14/08/16.
  */
 @Component
-public class ApplicationStartup
+public class ApplicationController
         implements ApplicationListener<ContextRefreshedEvent> {
 
     private static HashMap<String, Device> devices;
     private static final Console console = new Console();
 
-    ApplicationStartup(){
-        console.title("<-- SmartCity Riego-->", "Raspberry PI");
-
-        console.println("ApplicationStartup on!!");
-        console.separatorLine();
+    ApplicationController(){
 
         devices = new HashMap<String, Device>();
 
@@ -46,6 +43,29 @@ public class ApplicationStartup
 
     public static void addDevice(String key, Device device){
         devices.put(key, device);
+    }
+
+    public static void discoverI2CDevices(){
+        try {
+            ArrayList<DeviceI2C> devices = DeviceI2CController.discoverThings();
+            ApplicationController.getConsole().println(devices);
+
+            for (int i=0;i<devices.size();i++) {
+                Device device = devices.get(i);
+                for(int y=0;y<device.getDeviceComponents().length;y++){
+                    String component = device.getDeviceComponents()[y];
+                    ApplicationController.addDevice(component, device);
+                }
+            }
+            ApplicationController.getConsole().separatorLine();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (I2CFactory.UnsupportedBusNumberException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public static Device getDevice(String key){

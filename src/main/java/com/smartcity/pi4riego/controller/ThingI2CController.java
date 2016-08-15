@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class ThingI2CController {
 
     private static final int START_ADDRESS = 5;
-    private static final int END_ADDRESS = 5;
+    private static final int END_ADDRESS = 6;
     private static Object lock1 = new Object();
 
 

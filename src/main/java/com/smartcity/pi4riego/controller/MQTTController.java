@@ -10,7 +10,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  */
 public class MQTTController {
 
-    private static final String BROKER = "tcp://localhost:1883";
+    private static final String BROKER = "tcp://192.168.1.37:1883";
     private static final int QOS = 2;
 
     public MQTTController() {

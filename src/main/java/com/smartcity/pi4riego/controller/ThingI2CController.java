@@ -64,6 +64,7 @@ public class ThingI2CController {
     }
 
     public static ArrayList<ThingI2C> discoverThings() throws IOException, UnsatisfiedLinkError, I2CFactory.UnsupportedBusNumberException, InterruptedException {
+
         ArrayList<ThingI2C> things = new ArrayList<ThingI2C>();
         String message = "";
         for (int i = START_ADDRESS; i <= END_ADDRESS; i++) {

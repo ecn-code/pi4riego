@@ -1,5 +1,7 @@
 package com.smartcity.pi4riego.entity;
 
+import com.smartcity.pi4riego.constant.Enumerator;
+
 /**
  * Created by eliasibz on 14/08/16.
  */
@@ -17,7 +19,7 @@ public class ThingI2C extends Thing {
     }
 
     @Override
-    public int getType() {
-        return 0;
+    public Enumerator.THING_TYPE getType() {
+        return Enumerator.THING_TYPE.THING_I2C;
     }
 }

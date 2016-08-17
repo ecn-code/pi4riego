@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 
 import com.pi4j.io.i2c.I2CFactory;
+import com.smartcity.pi4riego.constant.Enumerator;
 import com.smartcity.pi4riego.controller.ApplicationController;
 import com.smartcity.pi4riego.controller.ThingI2CController;
 import com.smartcity.pi4riego.entity.Thing;
@@ -28,7 +29,12 @@ public class ScheduledTasks {
 
     @Scheduled(fixedRate = 15000)
     public void discoverDevices() {
-        ApplicationController.discoverI2CDevices();
+        try {
+            ApplicationController.discoverI2CThings();
+        }catch (UnsatisfiedLinkError e){
+            ApplicationController.getConsole().println("No hay puerto I2C disponible");
+        }
+        ApplicationController.discoverWIFIThings();
     }
 
     @Scheduled(fixedRate = 2000)
@@ -38,9 +44,11 @@ public class ScheduledTasks {
 
         for(int i=0;i<ApplicationController.getSensors().size();i++){
             Thing thing = ApplicationController.getDevice((String)ApplicationController.getSensors().toArray()[i]);
-            if(thing.getType() == 0) {
+
+            //Segun su tipo de comunicacion solicitamos informacion del sensor
+            if(thing.getType() == Enumerator.THING_TYPE.THING_I2C) {
                 try {
-                    //Solicitamos informacion
+                    //Leer sensor
                     String message = ThingI2CController.read((ThingI2C) thing);
 
                     ApplicationController.getConsole().println(message);
@@ -53,6 +61,8 @@ public class ScheduledTasks {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+            }else if(thing.getType() == Enumerator.THING_TYPE.THING_WIFI){
+
             }
         }
 

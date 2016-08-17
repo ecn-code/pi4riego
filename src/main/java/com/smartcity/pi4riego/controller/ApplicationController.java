@@ -2,9 +2,11 @@ package com.smartcity.pi4riego.controller;
 
 import com.pi4j.io.i2c.I2CFactory;
 import com.pi4j.util.Console;
+import com.smartcity.pi4riego.constant.Enumerator;
 import com.smartcity.pi4riego.entity.Thing;
 import com.smartcity.pi4riego.entity.ThingComponent;
 import com.smartcity.pi4riego.entity.ThingI2C;
+import com.smartcity.pi4riego.entity.ThingWIFI;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.context.ApplicationListener;
@@ -47,7 +49,7 @@ public class ApplicationController
         devices.put(key, thing);
     }
 
-    public static void discoverI2CDevices(){
+    public static void discoverI2CThings() throws UnsatisfiedLinkError{
         try {
             ArrayList<ThingI2C> devices = ThingI2CController.discoverThings();
             ApplicationController.getConsole().println(devices);
@@ -59,7 +61,7 @@ public class ApplicationController
                     ApplicationController.addDevice(component.getName(), thing);
 
                     //Si es un sensor, se registra para ser consultado
-                    if(component.getType() == 1){
+                    if(component.getType() == Enumerator.THING_COMPONENT_TYPE.SENSOR){
                         sensors.add(component.getName());
                     }
                 }
@@ -73,6 +75,25 @@ public class ApplicationController
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void discoverWIFIThings(){
+        ArrayList<ThingWIFI> devices = ThingWIFIController.discoverThings();
+        ApplicationController.getConsole().println(devices);
+
+        for (int i=0;i<devices.size();i++) {
+            Thing thing = devices.get(i);
+            for(int y = 0; y< thing.getThingComponents().length; y++){
+                ThingComponent component = thing.getThingComponents()[y];
+                ApplicationController.addDevice(component.getName(), thing);
+
+                //Si es un sensor, se registra para ser consultado
+                if(component.getType() == Enumerator.THING_COMPONENT_TYPE.SENSOR){
+                    sensors.add(component.getName());
+                }
+            }
+        }
+        ApplicationController.getConsole().separatorLine();
     }
 
     public static Set<String> getSensors() {

@@ -1,8 +1,10 @@
 package com.smartcity.pi4riego.controller;
 
 import com.pi4j.io.i2c.I2CFactory;
+import com.smartcity.pi4riego.constant.Enumerator;
 import com.smartcity.pi4riego.entity.Thing;
 import com.smartcity.pi4riego.entity.ThingI2C;
+import com.smartcity.pi4riego.entity.ThingWIFI;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,12 +43,14 @@ public class ThingController {
             response = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
         } else {
             try {
+
+                action = action.replace("}", ", \"res\":\"" + name + "\"}");
                 ApplicationController.getConsole().println("Service action: " + action);
 
-                action = action.replace("}", ", 'res':'" + name + "'}");
-
-                if (thing.getType() == 0) {
+                if (thing.getType() == Enumerator.THING_TYPE.THING_I2C) {
                     ThingI2CController.write((ThingI2C) thing, action);
+                }else if(thing.getType() == Enumerator.THING_TYPE.THING_WIFI){
+                    ThingWIFIController.write((ThingWIFI) thing, action);
                 }
 
                 response = new ResponseEntity<String>(HttpStatus.ACCEPTED);
@@ -77,7 +81,7 @@ public class ThingController {
             consumes = "application/json",
             produces = "application/json")
     public ResponseEntity<String> discover() throws InterruptedException {
-        ApplicationController.discoverI2CDevices();
+        ApplicationController.discoverI2CThings();
         return new ResponseEntity<String>(HttpStatus.ACCEPTED);
     }
 

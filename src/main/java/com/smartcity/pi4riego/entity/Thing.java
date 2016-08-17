@@ -1,5 +1,7 @@
 package com.smartcity.pi4riego.entity;
 
+import com.smartcity.pi4riego.constant.Enumerator;
+
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -25,7 +27,7 @@ public abstract class Thing {
         return thingComponents;
     }
 
-    public abstract int getType();
+    public abstract Enumerator.THING_TYPE getType();
 
     @Override
     public String toString(){

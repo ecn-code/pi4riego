@@ -3,11 +3,15 @@ package com.smartcity.pi4riego.controller;
 import com.pi4j.io.i2c.I2CBus;
 import com.pi4j.io.i2c.I2CDevice;
 import com.pi4j.io.i2c.I2CFactory;
+import com.smartcity.pi4riego.constant.Enumerator;
 import com.smartcity.pi4riego.entity.ThingComponent;
 import com.smartcity.pi4riego.entity.ThingI2C;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,11 +26,11 @@ public class ThingI2CController {
     private static Object lock1 = new Object();
 
 
-    private static synchronized I2CBus getI2CBus() throws IOException, I2CFactory.UnsupportedBusNumberException {
+    private static synchronized I2CBus getI2CBus() throws IOException, I2CFactory.UnsupportedBusNumberException, UnsatisfiedLinkError {
         return I2CFactory.getInstance(I2CBus.BUS_1);
     }
 
-    public static void write(ThingI2C device, String action) throws IOException, I2CFactory.UnsupportedBusNumberException {
+    public static void write(ThingI2C device, String action) throws IOException, I2CFactory.UnsupportedBusNumberException,UnsatisfiedLinkError {
         synchronized (lock1) {
             I2CBus i2c = getI2CBus();
             I2CDevice i2cDevice = i2c.getDevice(device.getAddressNumber());
@@ -59,7 +63,7 @@ public class ThingI2CController {
         return message;
     }
 
-    public static ArrayList<ThingI2C> discoverThings() throws IOException, I2CFactory.UnsupportedBusNumberException, InterruptedException {
+    public static ArrayList<ThingI2C> discoverThings() throws IOException, UnsatisfiedLinkError, I2CFactory.UnsupportedBusNumberException, InterruptedException {
         ArrayList<ThingI2C> things = new ArrayList<ThingI2C>();
         String message = "";
         for (int i = START_ADDRESS; i <= END_ADDRESS; i++) {
@@ -89,8 +93,13 @@ public class ThingI2CController {
                     //Se instancian los componentes de la thing
                     for (int y=0;y<json.keySet().size();y++) {
                         String componentName = (String)json.keySet().toArray()[y];
+                        Enumerator.THING_COMPONENT_TYPE type = Enumerator.THING_COMPONENT_TYPE.ACTUATOR;
+                        if(Integer.parseInt((String)json.get(componentName))  == 1) {
+                            type = Enumerator.THING_COMPONENT_TYPE.SENSOR;
+                        }
+
                         thingComponents[y] = new ThingComponent(componentName,
-                                Integer.parseInt((String)json.get(componentName)));
+                               type );
                     }
 
                     things.add(new ThingI2C(i, thingComponents, i));

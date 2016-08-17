@@ -1,15 +1,17 @@
 package com.smartcity.pi4riego.entity;
 
+import com.smartcity.pi4riego.constant.Enumerator;
+
 /**
  * Created by eliasibz on 15/08/16.
  */
 public class ThingComponent {
 
     private final String name;
-    private final int type;
+    private final Enumerator.THING_COMPONENT_TYPE type;
 
 
-    public ThingComponent(String name, int type) {
+    public ThingComponent(String name, Enumerator.THING_COMPONENT_TYPE type) {
         this.name = name;
         this.type = type;
     }
@@ -18,7 +20,7 @@ public class ThingComponent {
         return name;
     }
 
-    public int getType() {
+    public Enumerator.THING_COMPONENT_TYPE getType() {
         return type;
     }
 
@@ -29,7 +31,7 @@ public class ThingComponent {
 
     private String getTypeStr(){
         String typeStr = "Actuador";
-        if(type == 1){
+        if(type == Enumerator.THING_COMPONENT_TYPE.SENSOR){
             typeStr = "Sensor";
         }
         return typeStr;

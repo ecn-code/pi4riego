@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import com.pi4j.io.i2c.I2CFactory;
 import com.smartcity.pi4riego.constant.Enumerator;
 import com.smartcity.pi4riego.controller.ApplicationController;
+import com.smartcity.pi4riego.controller.MQTTController;
 import com.smartcity.pi4riego.controller.ThingI2CController;
 import com.smartcity.pi4riego.entity.Thing;
 import com.smartcity.pi4riego.entity.ThingI2C;
@@ -50,6 +51,10 @@ public class ScheduledTasks {
                 try {
                     //Leer sensor
                     String message = ThingI2CController.read((ThingI2C) thing);
+
+                    //Enviar lectura al broker
+                    MQTTController.publish("topic", (String)ApplicationController.getSensors().toArray()[i],
+                            "{\"action\":\"on\"}");
 
                     ApplicationController.getConsole().println(message);
                     ApplicationController.getConsole().separatorLine();

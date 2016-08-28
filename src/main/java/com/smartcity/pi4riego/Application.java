@@ -17,6 +17,7 @@ public class Application {
     public static void main(String[] args){
 
         MQTTController.setIPBROKER(args[0]);
+
         SpringApplication.run(Application.class, args);
 
     }

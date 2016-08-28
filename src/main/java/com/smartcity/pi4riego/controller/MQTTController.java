@@ -10,21 +10,23 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  */
 public class MQTTController {
 
-    private static final String BROKER = "tcp://192.168.1.37:1883";
+    private static String IPBROKER;//"tcp://192.168.1.37:1883";
     private static final int QOS = 2;
 
-    public MQTTController() {
+    public static void setIPBROKER(String ipBroker) {
+        IPBROKER = ipBroker;
+        ApplicationController.getConsole().println("MQTTServer: "+ipBroker);
     }
 
     public static void publish(String topic, String clientId, String content) {
-        MqttClient sampleClient = null;
+
         try {
-            sampleClient = new MqttClient(BROKER, clientId);
+            MqttClient sampleClient = new MqttClient(IPBROKER, clientId);
 
             MqttConnectOptions connOpts = new MqttConnectOptions();
             connOpts.setCleanSession(true);
 
-            ApplicationController.getConsole().println("Connecting to broker: " + BROKER);
+            ApplicationController.getConsole().println("Connecting to broker: " + IPBROKER);
             sampleClient.connect(connOpts);
             ApplicationController.getConsole().println("Connected");
             ApplicationController.getConsole().println("Publishing message: " + content);

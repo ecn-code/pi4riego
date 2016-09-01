@@ -81,6 +81,7 @@ public class ThingI2CController {
                 ApplicationController.getConsole().println(message);
 
             } catch (Exception e) {
+                e.printStackTrace();
                 ApplicationController.getConsole().println("En la direccion " + i + " no hay nada.");
             }
 

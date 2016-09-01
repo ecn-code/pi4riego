@@ -52,6 +52,7 @@ public class ThingI2CController {
 
             int b = i2cDevice.read();
             ApplicationController.getConsole().println(b);
+
             while (((char) b) != '_') {
                 if (b != 0) {
                     message += (char) b;

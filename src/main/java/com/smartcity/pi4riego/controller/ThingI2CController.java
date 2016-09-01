@@ -98,7 +98,7 @@ public class ThingI2CController {
                     for (int y=0;y<json.keySet().size();y++) {
                         String componentName = (String)json.keySet().toArray()[y];
                         Enumerator.THING_COMPONENT_TYPE type = Enumerator.THING_COMPONENT_TYPE.ACTUATOR;
-                        String[] typeSubtype = ((String)json.get(componentName)).split("?");
+                        String[] typeSubtype = ((String)json.get(componentName)).split("(?<!\\\\), ");
                         if(Integer.parseInt(typeSubtype[0])  == 1) {
                             type = Enumerator.THING_COMPONENT_TYPE.SENSOR;
                         }

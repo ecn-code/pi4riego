@@ -9,12 +9,14 @@ public class ThingComponent {
 
     private final String name;
     private final Enumerator.THING_COMPONENT_TYPE type;
+    private final String subType;
     private String status;
 
 
-    public ThingComponent(String name, Enumerator.THING_COMPONENT_TYPE type) {
+    public ThingComponent(String name, Enumerator.THING_COMPONENT_TYPE type, String subType) {
         this.name = name;
         this.type = type;
+        this.subType = subType;
     }
 
     public String getName() {
@@ -44,5 +46,17 @@ public class ThingComponent {
             typeStr = "Sensor";
         }
         return typeStr;
+    }
+
+    public String getTypeInt() {
+        String typeStr = "0";
+        if(type == Enumerator.THING_COMPONENT_TYPE.SENSOR){
+            typeStr = "1";
+        }
+        return typeStr;
+    }
+
+    public String getSubType() {
+        return subType;
     }
 }

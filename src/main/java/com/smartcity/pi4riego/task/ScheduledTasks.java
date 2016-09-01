@@ -9,7 +9,9 @@ import com.smartcity.pi4riego.controller.ApplicationController;
 import com.smartcity.pi4riego.controller.MQTTController;
 import com.smartcity.pi4riego.controller.ThingI2CController;
 import com.smartcity.pi4riego.entity.Thing;
+import com.smartcity.pi4riego.entity.ThingComponent;
 import com.smartcity.pi4riego.entity.ThingI2C;
+import org.json.simple.parser.ParseException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -49,21 +51,28 @@ public class ScheduledTasks {
             //Segun su tipo de comunicacion solicitamos informacion del sensor
             if(thing.getType() == Enumerator.THING_TYPE.THING_I2C) {
                 try {
-                    //Leer sensor
-                    String message = ThingI2CController.read((ThingI2C) thing);
+                    //Actualizar estados
+                    ThingI2CController.updateStatus((ThingI2C) thing);
 
-                    //Enviar lectura al broker
-                    MQTTController.publish("topic", (String)ApplicationController.getSensors().toArray()[i],
-                            "{\"action\":\"on\"}");
+                    for(int j=0;i<thing.getThingComponents().length;j++){
+                        ThingComponent thingComponent = thing.getThingComponents()[j];
+                        String status = thingComponent.getStatus();
 
-                    ApplicationController.getConsole().println(message);
-                    ApplicationController.getConsole().separatorLine();
+                        //Enviar lectura al broker
+                        MQTTController.publish("topic", thingComponent.getName(),
+                                "{\"action\":\""+status+"\"}");
+
+                        ApplicationController.getConsole().println(status);
+                        ApplicationController.getConsole().separatorLine();
+                    }
 
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (I2CFactory.UnsupportedBusNumberException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ParseException e) {
                     e.printStackTrace();
                 }
             }else if(thing.getType() == Enumerator.THING_TYPE.THING_WIFI){
@@ -73,7 +82,6 @@ public class ScheduledTasks {
 
         ApplicationController.getConsole().separatorLine();
     }
-
 
 
 }

@@ -9,6 +9,7 @@ public class ThingComponent {
 
     private final String name;
     private final Enumerator.THING_COMPONENT_TYPE type;
+    private String status;
 
 
     public ThingComponent(String name, Enumerator.THING_COMPONENT_TYPE type) {
@@ -22,6 +23,14 @@ public class ThingComponent {
 
     public Enumerator.THING_COMPONENT_TYPE getType() {
         return type;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override

@@ -43,8 +43,8 @@ public class ScheduledTasks {
 
         ApplicationController.getConsole().println("--- Start Pull Sensors--");
 
-        for(int i=0;i<ApplicationController.getSensors().size();i++){
-            Thing thing = ApplicationController.getDevice((String)ApplicationController.getSensors().toArray()[i]);
+        for(int i=0;i<ApplicationController.getDevices().size();i++){
+            Thing thing = (Thing) ApplicationController.getDevices().toArray()[i];
 
             //Segun su tipo de comunicacion solicitamos informacion del sensor
             if(thing.getType() == Enumerator.THING_TYPE.THING_I2C) {

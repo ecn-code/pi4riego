@@ -12,10 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.context.ApplicationListener;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by eliasibz on 14/08/16.
@@ -107,4 +104,6 @@ public class ApplicationController
     public static Console getConsole(){
         return console;
     }
+
+    public static Collection<Thing> getDevices(){return devices.values();}
 }

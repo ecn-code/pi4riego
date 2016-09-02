@@ -61,6 +61,7 @@ public class ScheduledTasks {
                         //Enviar lectura al broker
                         MQTTController.publish("topic", thingComponent.getName(),
                                 "{\"value\":\""+status+"\"," +
+                                        "\"name\":\""+thingComponent.getName()+"\"," +
                                         "\"type\":\""+thingComponent.getTypeInt()+"\"," +
                                         "\"subtype\":\""+thingComponent.getSubType()+"\"}");
 

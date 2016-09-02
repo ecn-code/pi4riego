@@ -30,7 +30,7 @@ public class ThingI2CController {
         return I2CFactory.getInstance(I2CBus.BUS_1);
     }
 
-    public static void write(ThingI2C device, String action) throws IOException, I2CFactory.UnsupportedBusNumberException,UnsatisfiedLinkError {
+    public static void write(ThingI2C device, String action) throws IOException, I2CFactory.UnsupportedBusNumberException, UnsatisfiedLinkError, InterruptedException {
         synchronized (lock1) {
             I2CBus i2c = getI2CBus();
             I2CDevice i2cDevice = i2c.getDevice(device.getAddressNumber());
@@ -39,6 +39,7 @@ public class ThingI2CController {
                 if ((i + 1) != msg.length) {
                     msg[i] += ",";
                 }
+                Thread.sleep(100);
                 i2cDevice.write(msg[i].getBytes());
             }
         }

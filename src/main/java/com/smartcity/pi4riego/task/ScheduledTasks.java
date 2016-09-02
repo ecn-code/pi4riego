@@ -54,7 +54,7 @@ public class ScheduledTasks {
                     //Actualizar estados
                     ThingI2CController.updateStatus((ThingI2C) thing);
 
-                    for(int j=0;i<thing.getThingComponents().length;j++){
+                    for(int j=0;j<thing.getThingComponents().length;j++){
                         ThingComponent thingComponent = thing.getThingComponents()[j];
                         String status = thingComponent.getStatus();
 

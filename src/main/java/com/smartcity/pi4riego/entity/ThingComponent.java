@@ -30,7 +30,7 @@ public class ThingComponent {
     }
 
     public String getStatus() {
-        if(status == null){
+        if(status == null || status.equals("nan")){
             ApplicationController.getConsole().box("Hay un null en el objeto:\n "+name);
             ApplicationController.getConsole().println("");
             status = "-1";

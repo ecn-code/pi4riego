@@ -22,12 +22,14 @@ import java.util.ArrayList;
  */
 public class ThingWIFIController {
 
+    private static String[] ips = new String[]{"http://192.168.43.103", "http://192.168.1.38"};
+
     public static ArrayList<ThingWIFI> discoverThings() {
 
         ApplicationController.getConsole().separatorLine();
 
         ArrayList<ThingWIFI> things = new ArrayList<ThingWIFI>();
-        String[] ips = new String[]{"http://192.168.43.103", "http://192.168.1.38"};
+
         String response = null;
         String resourceUrl = null;
 
@@ -133,4 +135,7 @@ public class ThingWIFIController {
         }
     }
 
+    public static void setIPs(String[] IPs) {
+        ips = IPs;
+    }
 }

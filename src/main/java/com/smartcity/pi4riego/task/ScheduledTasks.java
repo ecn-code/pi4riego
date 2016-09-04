@@ -8,9 +8,11 @@ import com.smartcity.pi4riego.constant.Enumerator;
 import com.smartcity.pi4riego.controller.ApplicationController;
 import com.smartcity.pi4riego.controller.MQTTController;
 import com.smartcity.pi4riego.controller.ThingI2CController;
+import com.smartcity.pi4riego.controller.ThingWIFIController;
 import com.smartcity.pi4riego.entity.Thing;
 import com.smartcity.pi4riego.entity.ThingComponent;
 import com.smartcity.pi4riego.entity.ThingI2C;
+import com.smartcity.pi4riego.entity.ThingWIFI;
 import org.json.simple.parser.ParseException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -86,7 +88,31 @@ public class ScheduledTasks {
                     ApplicationController.getConsole().println("Error de interrupcion");
                 }
             }else if(thing.getType() == Enumerator.THING_TYPE.THING_WIFI){
+                //Actualizar estados
+                try {
+                    ThingWIFIController.updateStatus((ThingWIFI) thing);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (I2CFactory.UnsupportedBusNumberException e) {
+                    e.printStackTrace();
+                }
 
+                for(int j=0;j<thing.getThingComponents().length;j++){
+                    ThingComponent thingComponent = thing.getThingComponents()[j];
+                    String status = thingComponent.getStatus();
+
+                    //Enviar lectura al broker
+                    MQTTController.publish("topic", thingComponent.getName(),
+                            "{\"value\":\""+status+"\"," +
+                                    "\"name\":\""+thingComponent.getName()+"\"," +
+                                    "\"type\":\""+thingComponent.getTypeInt()+"\"," +
+                                    "\"subtype\":\""+thingComponent.getSubType()+"\"}");
+
+                    ApplicationController.getConsole().println(status);
+
+                }
             }
         }
 

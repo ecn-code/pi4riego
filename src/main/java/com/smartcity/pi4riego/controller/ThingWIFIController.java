@@ -1,7 +1,9 @@
 package com.smartcity.pi4riego.controller;
 
+import com.pi4j.io.i2c.I2CFactory;
 import com.smartcity.pi4riego.constant.Enumerator;
 import com.smartcity.pi4riego.entity.ThingComponent;
+import com.smartcity.pi4riego.entity.ThingI2C;
 import com.smartcity.pi4riego.entity.ThingWIFI;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -12,6 +14,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -104,6 +107,29 @@ public class ThingWIFIController {
 
         } catch (Exception e) {
             //e.printStackTrace();
+        }
+    }
+
+    public static void updateStatus(ThingWIFI thingWIFI) throws InterruptedException, IOException, I2CFactory.UnsupportedBusNumberException {
+
+        RestTemplate restTemplate = new RestTemplate();
+        String resourceUrl = thingWIFI.getIp();
+        String message =
+                restTemplate.getForObject(resourceUrl + "/" + "info", String.class);
+
+        JSONParser parser = new JSONParser();
+        JSONObject json = null;
+        try {
+            json = (JSONObject) parser.parse(message);
+        } catch (ParseException e) {
+            ApplicationController.getConsole().println("Error parseo: "+message);
+        }
+        ApplicationController.getConsole().println(json.toJSONString());
+
+        for(int i=0;i<thingWIFI.getThingComponents().length;i++){
+            ThingComponent thingComponent = thingWIFI.getThingComponents()[i];
+            String status = (String) json.get(thingComponent.getName());
+            thingComponent.setStatus(status);
         }
     }
 

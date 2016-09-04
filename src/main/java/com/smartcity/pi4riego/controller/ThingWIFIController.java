@@ -22,7 +22,7 @@ import java.util.ArrayList;
  */
 public class ThingWIFIController {
 
-    private static String[] ips = new String[]{"http://192.168.43.103", "http://192.168.1.38"};
+    private static String[] ips = new String[]{"http://192.168.43.46", "http://192.168.1.38"};
 
     public static ArrayList<ThingWIFI> discoverThings() {
 
@@ -46,6 +46,7 @@ public class ThingWIFIController {
 
                 resourceUrl = ips[i];
                 HttpEntity<String> request = new HttpEntity(new String());
+                response = null;
                 response =
                         restTemplate.getForObject(resourceUrl + "/info", String.class);
 
@@ -57,7 +58,7 @@ public class ThingWIFIController {
                 ApplicationController.getConsole().println("Dispostivo "+resourceUrl+" no disponible.");
             }
 
-            if (response != null) {
+            if (response != null && response !="") {
                 JSONParser parser = new JSONParser();
                 try {
                     JSONObject json = (JSONObject) parser.parse(response);
@@ -117,7 +118,7 @@ public class ThingWIFIController {
         RestTemplate restTemplate = new RestTemplate();
         String resourceUrl = thingWIFI.getIp();
         String message =
-                restTemplate.getForObject(resourceUrl + "/" + "info", String.class);
+                restTemplate.getForObject(resourceUrl + "/" + "status", String.class);
 
         JSONParser parser = new JSONParser();
         JSONObject json = null;

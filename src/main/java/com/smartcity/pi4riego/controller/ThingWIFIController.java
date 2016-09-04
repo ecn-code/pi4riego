@@ -21,6 +21,8 @@ public class ThingWIFIController {
 
     public static ArrayList<ThingWIFI> discoverThings() {
 
+        ApplicationController.getConsole().separatorLine();
+
         ArrayList<ThingWIFI> things = new ArrayList<ThingWIFI>();
         String[] ips = new String[]{"http://192.168.1.37", "http://192.168.1.38"};
         String response = null;
@@ -31,7 +33,7 @@ public class ThingWIFIController {
         httpRequestFactory.setConnectTimeout(1000);
         httpRequestFactory.setReadTimeout(1000);
 
-        ApplicationController.getConsole().println("discoverThings");
+        ApplicationController.getConsole().println("Buscando dispositivos WIFI: ");
 
         for (int i = 0; i < ips.length; i++) {
             try {
@@ -42,12 +44,12 @@ public class ThingWIFIController {
                 response =
                         restTemplate.getForObject(resourceUrl + "/info", String.class);
 
-                ApplicationController.getConsole().separatorLine();
                 ApplicationController.getConsole().println(resourceUrl);
-                ApplicationController.getConsole().separatorLine();
+
 
             } catch (Exception e) {
                 //e.printStackTrace();
+                ApplicationController.getConsole().println("Dispostivo "+resourceUrl+" no disponible.");
             }
 
             if (response != null) {
@@ -74,10 +76,12 @@ public class ThingWIFIController {
 
                 } catch (ParseException e) {
                     //e.printStackTrace();
+                    ApplicationController.getConsole().println("Error de parseo: "+response);
                 }
             }
-
+            ApplicationController.getConsole().separatorLine();
         }
+
         return things;
     }
 

@@ -12,6 +12,7 @@ public class MQTTController {
 
     private static String IPBROKER;//"tcp://192.168.1.37:1883";
     private static final int QOS = 2;
+    private static final int TIMEOUT = 1000;
 
     public static void setIPBROKER(String ipBroker) {
         IPBROKER = ipBroker;
@@ -21,26 +22,27 @@ public class MQTTController {
     public static void publish(String topic, String clientId, String content) {
 
         try {
-            MqttClient sampleClient = new MqttClient(IPBROKER, clientId);
+            MqttClient clientMQTT = new MqttClient(IPBROKER, clientId);
 
             MqttConnectOptions connOpts = new MqttConnectOptions();
             connOpts.setCleanSession(true);
-
+            connOpts.setConnectionTimeout(TIMEOUT);
             ApplicationController.getConsole().println("Connecting to broker: " + IPBROKER);
-            sampleClient.connect(connOpts);
+            clientMQTT.connect(connOpts);
             ApplicationController.getConsole().println("Connected");
             ApplicationController.getConsole().println("Publishing message: " + content);
 
             MqttMessage message = new MqttMessage(content.getBytes());
             message.setQos(QOS);
-            sampleClient.publish(topic, message);
+            clientMQTT.publish(topic, message);
             ApplicationController.getConsole().println("Message published");
 
-            sampleClient.disconnect();
+            clientMQTT.disconnect();
             ApplicationController.getConsole().println("Disconnected");
 
         } catch (MqttException e) {
-            e.printStackTrace();
+
+            //e.printStackTrace();
         }
     }
 

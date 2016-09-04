@@ -28,6 +28,7 @@ public class ThingComponent {
     }
 
     public String getStatus() {
+        if(status == null){status = "-1";}
         return status;
     }
 

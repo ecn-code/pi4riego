@@ -22,6 +22,8 @@ import org.springframework.stereotype.Component;
 public class ScheduledTasks {
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+    private int contador = 0;
+
 
     ScheduledTasks(){
         ApplicationController.getConsole().title("<-- SmartCity Riego-->", "Raspberry PI");
@@ -30,18 +32,22 @@ public class ScheduledTasks {
         ApplicationController.getConsole().separatorLine();
     }
 
-    @Scheduled(fixedRate = 15000)
-    public void discoverDevices() {
-        try {
-            ApplicationController.discoverI2CThings();
-        }catch (UnsatisfiedLinkError e){
-            ApplicationController.getConsole().println("No hay puerto I2C disponible");
-        }
-        ApplicationController.discoverWIFIThings();
-    }
-
     @Scheduled(fixedRate = 5000)
-    public void pullSensors() {
+    public void discoverAndPull() {
+
+        //Cada 15 segundos
+        if(contador > 3) {
+            try {
+                ApplicationController.discoverI2CThings();
+            } catch (UnsatisfiedLinkError e) {
+                ApplicationController.getConsole().println("No hay puerto I2C disponible");
+            }
+            ApplicationController.discoverWIFIThings();
+            contador = 0;
+        }else{
+            contador++;
+        }
+
         ApplicationController.getConsole().separatorLine();
         ApplicationController.getConsole().println("--- Start Pull Sensors--");
 

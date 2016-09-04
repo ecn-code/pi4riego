@@ -13,6 +13,7 @@ public class ThingComponent {
     private final Enumerator.THING_COMPONENT_TYPE type;
     private final String subType;
     private String status;
+    private String lastStatus;
 
 
     public ThingComponent(String name, Enumerator.THING_COMPONENT_TYPE type, String subType) {
@@ -38,7 +39,12 @@ public class ThingComponent {
         return status;
     }
 
+    public String getLastStatus() {
+        return lastStatus;
+    }
+
     public void setStatus(String status) {
+        this.lastStatus = this.status;
         this.status = status;
     }
 

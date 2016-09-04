@@ -65,15 +65,19 @@ public class ScheduledTasks {
                     for(int j=0;j<thing.getThingComponents().length;j++){
                         ThingComponent thingComponent = thing.getThingComponents()[j];
                         String status = thingComponent.getStatus();
+                        String lastStatus = thingComponent.getLastStatus();
 
-                        //Enviar lectura al broker
-                        MQTTController.publish("topic", thingComponent.getName(),
-                                "{\"value\":\""+status+"\"," +
-                                        "\"name\":\""+thingComponent.getName()+"\"," +
-                                        "\"type\":\""+thingComponent.getTypeInt()+"\"," +
-                                        "\"subtype\":\""+thingComponent.getSubType()+"\"}");
+                        //Si el estado es distinto al anterior, lo distribuimos
+                        if(!status.equals(lastStatus)) {
+                            //Enviar lectura al broker
+                            MQTTController.publish("topic", thingComponent.getName(),
+                                    "{\"value\":\"" + status + "\"," +
+                                            "\"name\":\"" + thingComponent.getName() + "\"," +
+                                            "\"type\":\"" + thingComponent.getTypeInt() + "\"," +
+                                            "\"subtype\":\"" + thingComponent.getSubType() + "\"}");
 
-                        ApplicationController.getConsole().println(status);
+                            ApplicationController.getConsole().println(status);
+                        }
 
                     }
 
@@ -102,15 +106,19 @@ public class ScheduledTasks {
                 for(int j=0;j<thing.getThingComponents().length;j++){
                     ThingComponent thingComponent = thing.getThingComponents()[j];
                     String status = thingComponent.getStatus();
+                    String lastStatus = thingComponent.getLastStatus();
 
-                    //Enviar lectura al broker
-                    MQTTController.publish("topic", thingComponent.getName(),
-                            "{\"value\":\""+status+"\"," +
-                                    "\"name\":\""+thingComponent.getName()+"\"," +
-                                    "\"type\":\""+thingComponent.getTypeInt()+"\"," +
-                                    "\"subtype\":\""+thingComponent.getSubType()+"\"}");
+                    //Si el estado es distinto al anterior, lo distribuimos
+                    if(!status.equals(lastStatus)) {
+                        //Enviar lectura al broker
+                        MQTTController.publish("topic", thingComponent.getName(),
+                                "{\"value\":\""+status+"\"," +
+                                        "\"name\":\""+thingComponent.getName()+"\"," +
+                                        "\"type\":\""+thingComponent.getTypeInt()+"\"," +
+                                        "\"subtype\":\""+thingComponent.getSubType()+"\"}");
 
-                    ApplicationController.getConsole().println(status);
+                        ApplicationController.getConsole().println(status);
+                    }
 
                 }
             }

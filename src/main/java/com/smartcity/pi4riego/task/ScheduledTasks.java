@@ -40,9 +40,9 @@ public class ScheduledTasks {
         ApplicationController.discoverWIFIThings();
     }
 
-    @Scheduled(fixedRate = 2000)
+    @Scheduled(fixedRate = 5000)
     public void pullSensors() {
-
+        ApplicationController.getConsole().separatorLine();
         ApplicationController.getConsole().println("--- Start Pull Sensors--");
 
         for(int i=0;i<ApplicationController.getDevices().size();i++){
@@ -66,17 +66,21 @@ public class ScheduledTasks {
                                         "\"subtype\":\""+thingComponent.getSubType()+"\"}");
 
                         ApplicationController.getConsole().println(status);
-                        ApplicationController.getConsole().separatorLine();
+
                     }
 
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
+                    ApplicationController.getConsole().println("Error de escritura");
                 } catch (I2CFactory.UnsupportedBusNumberException e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
+                    ApplicationController.getConsole().println("Error de I2C");
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
+                    ApplicationController.getConsole().println("Error de interrupcion");
                 } catch (ParseException e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
+                    ApplicationController.getConsole().println("Error de parseado: ");
                 }
             }else if(thing.getType() == Enumerator.THING_TYPE.THING_WIFI){
 

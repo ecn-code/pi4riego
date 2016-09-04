@@ -1,6 +1,8 @@
 package com.smartcity.pi4riego.entity;
 
+import com.smartcity.pi4riego.Application;
 import com.smartcity.pi4riego.constant.Enumerator;
+import com.smartcity.pi4riego.controller.ApplicationController;
 
 /**
  * Created by eliasibz on 15/08/16.
@@ -28,7 +30,11 @@ public class ThingComponent {
     }
 
     public String getStatus() {
-        if(status == null){status = "-1";}
+        if(status == null){
+            ApplicationController.getConsole().box("Hay un null en el objeto:\n "+name);
+            ApplicationController.getConsole().println("");
+            status = "-1";
+        }
         return status;
     }
 

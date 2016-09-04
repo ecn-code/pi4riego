@@ -24,7 +24,7 @@ public class ThingWIFIController {
         ApplicationController.getConsole().separatorLine();
 
         ArrayList<ThingWIFI> things = new ArrayList<ThingWIFI>();
-        String[] ips = new String[]{"http://192.168.1.37", "http://192.168.1.38"};
+        String[] ips = new String[]{"http://192.168.43.103", "http://192.168.1.38"};
         String response = null;
         String resourceUrl = null;
 

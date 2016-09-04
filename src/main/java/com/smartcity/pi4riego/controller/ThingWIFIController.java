@@ -41,10 +41,13 @@ public class ThingWIFIController {
                 HttpEntity<String> request = new HttpEntity(new String());
                 response =
                         restTemplate.getForObject(resourceUrl + "/info", String.class);
+
+                ApplicationController.getConsole().separatorLine();
                 ApplicationController.getConsole().println(resourceUrl);
+                ApplicationController.getConsole().separatorLine();
 
             } catch (Exception e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
 
             if (response != null) {
@@ -70,7 +73,7 @@ public class ThingWIFIController {
                     things.add(new ThingWIFI(i, thingComponents, resourceUrl));
 
                 } catch (ParseException e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
                 }
             }
 
@@ -96,7 +99,7 @@ public class ThingWIFIController {
             ApplicationController.getConsole().separatorLine();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 

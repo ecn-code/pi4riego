@@ -48,7 +48,11 @@ public class ThingController {
                 ApplicationController.getConsole().println("Service action: " + action);
 
                 if (thing.getType() == Enumerator.THING_TYPE.THING_I2C) {
-                    ThingI2CController.write((ThingI2C) thing, action);
+                    try {
+                        ThingI2CController.write((ThingI2C) thing, action);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }else if(thing.getType() == Enumerator.THING_TYPE.THING_WIFI){
                     ThingWIFIController.write((ThingWIFI) thing, action);
                 }

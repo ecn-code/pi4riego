@@ -39,7 +39,7 @@ public class ThingI2CController {
                 if ((i + 1) != msg.length) {
                     msg[i] += ",";
                 }
-                Thread.sleep(100);
+                Thread.sleep(10);
                 i2cDevice.write(msg[i].getBytes());
             }
         }
@@ -81,10 +81,12 @@ public class ThingI2CController {
                 message = read(new ThingI2C(-1, null, i));
 
                 //s = new String(buffer, "UTF-8").split("�")[0];
+                ApplicationController.getConsole().separatorLine();
                 ApplicationController.getConsole().println(message);
+                ApplicationController.getConsole().separatorLine();
 
             } catch (Exception e) {
-                e.printStackTrace();
+                //e.printStackTrace();
                 ApplicationController.getConsole().println("En la direccion " + i + " no hay nada.");
             }
 

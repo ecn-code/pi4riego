@@ -67,7 +67,8 @@ public class ThingI2CController {
     }
 
     public static ArrayList<ThingI2C> discoverThings() throws IOException, UnsatisfiedLinkError, I2CFactory.UnsupportedBusNumberException, InterruptedException {
-
+        ApplicationController.getConsole().separatorLine();
+        ApplicationController.getConsole().println("Buscando dispositivos I2C");
         ArrayList<ThingI2C> things = new ArrayList<ThingI2C>();
         String message = "";
         for (int i = START_ADDRESS; i <= END_ADDRESS; i++) {
@@ -81,9 +82,9 @@ public class ThingI2CController {
                 message = read(new ThingI2C(-1, null, i));
 
                 //s = new String(buffer, "UTF-8").split("�")[0];
-                ApplicationController.getConsole().separatorLine();
+
                 ApplicationController.getConsole().println(message);
-                ApplicationController.getConsole().separatorLine();
+
 
             } catch (Exception e) {
                 //e.printStackTrace();
@@ -113,11 +114,12 @@ public class ThingI2CController {
                     things.add(new ThingI2C(i, thingComponents, i));
 
                 } catch (ParseException e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
+                    ApplicationController.getConsole().println("Error de parseo: "+message);
                 }
             }
         }
-
+        ApplicationController.getConsole().separatorLine();
         return things;
     }
 

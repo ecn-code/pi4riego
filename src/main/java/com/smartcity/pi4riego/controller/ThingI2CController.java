@@ -52,7 +52,6 @@ public class ThingI2CController {
             I2CDevice i2cDevice = i2c.getDevice(device.getAddressNumber());
 
             int b = i2cDevice.read();
-            ApplicationController.getConsole().println(b);
 
             while (((char) b) != '_') {
                 if (b != 0) {
@@ -123,12 +122,17 @@ public class ThingI2CController {
         return things;
     }
 
-    public static void updateStatus(ThingI2C thing) throws InterruptedException, IOException, I2CFactory.UnsupportedBusNumberException, ParseException {
+    public static void updateStatus(ThingI2C thing) throws InterruptedException, IOException, I2CFactory.UnsupportedBusNumberException {
 
         String message = read(thing);
 
         JSONParser parser = new JSONParser();
-        JSONObject json = (JSONObject) parser.parse(message);
+        JSONObject json = null;
+        try {
+            json = (JSONObject) parser.parse(message);
+        } catch (ParseException e) {
+            ApplicationController.getConsole().println("Error parseo: "+message);
+        }
         ApplicationController.getConsole().println(json.toJSONString());
 
         for(int i=0;i<thing.getThingComponents().length;i++){

@@ -84,9 +84,6 @@ public class ScheduledTasks {
                 } catch (InterruptedException e) {
                     //e.printStackTrace();
                     ApplicationController.getConsole().println("Error de interrupcion");
-                } catch (ParseException e) {
-                    //e.printStackTrace();
-                    ApplicationController.getConsole().println("Error de parseado: ");
                 }
             }else if(thing.getType() == Enumerator.THING_TYPE.THING_WIFI){
 
